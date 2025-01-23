@@ -86,5 +86,17 @@ F(X)를 sum(G(xi)) 형식으로 유도해보자.
 - embedding layer가 있다면, embedding space의 zero vector 사용하기. 그러니까 text encoding 단계의 index를 그대로 사용하지 말라는 뜻이다. 이러면 인접한 index의 token들 때문에 불필요한 fluctuation이 너무 많이 발생한다. )
 
 > 실제로 encoding 단계에서 zero vector를 사용하는 것보다 embedding space에서 zero vector를 사용하는게 에러율이 훨씬 작다. 정말 **훠어어어얼씬** 작다.
->
 
+
+
+아래는 회사에서 사용한 모델이다. 눈여겨 볼 점은:
+
+1. Steps 수를 늘리면 데이터들의 Integrated Gradient Error (IG Error) 분포가 뾰족해진다. 
+   - 즉 RMSE가 작아진다. 
+   - Steps=50에서 IG Error가 얼마나 큰지 보라. 지금 모델이 Binary Classification 모델인데, IG Error가 -1이 넘는 것들이 엄청나게 많다.
+
+2. Bilstm 모델은 Encoding 단계에서 zero vector를 사용했고, Transformer 모델은 Embedding 단계에서 zero vector를 사용했다. (모델 차이도 있겠지만) 어느 단계에서 zero vector를 사용하는지에 따라서 IG Error 분포는 확연하게 다르다.
+
+![fig02](../assets/img/figs/2024-12-30-Integrated Gradient/fig02.png)
+
+![fig03](../assets/img/figs/2024-12-30-Integrated Gradient/fig03.png)
