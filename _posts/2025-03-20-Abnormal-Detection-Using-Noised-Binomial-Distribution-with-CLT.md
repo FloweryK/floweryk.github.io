@@ -1,8 +1,8 @@
 ---
 title: Abnormal Detection Using Noised Binomial Distribution with CLT
 date: 2025-03-20 22:00:00 +0900
-categories: [Statistics]
-tags: [Abnormal Detection, Statistics]
+categories: [Study, Data Science]
+tags: [Study, Data Science, Abnormal Detection, Statistics]
 math: true
 ---
 
