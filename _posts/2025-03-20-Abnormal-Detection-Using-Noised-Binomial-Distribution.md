@@ -131,7 +131,6 @@ $$
 $$
 
 
-
 $$
 \begin{align}
 
@@ -140,95 +139,46 @@ Var[\frac{z_i}{n_i}]
 
 \\
 &= 
-\frac{1}{n_i ^ 2}
+\frac{1}{n_i ^2}
 \left[
-  (1-\pi)^2 \cdot Var[B(n_i, p_0)] 
-  + \pi^2 \cdot Var[B(n_i-\epsilon_i, p_0)] 
-  + \pi^2 \cdot Var[\epsilon_i]
-  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), B(n_i - \epsilon_i, p_0)]
-  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), \epsilon_i]
-  + 2 \pi^2 \cdot Cov[B(n_i - \epsilon_i, p_0), \epsilon_i]
+	\mathbb{E}[Var[z_i | S]]
+	+ Var[\mathbb{E}[z_i | S]]
 \right]
 
 \\
 &=
-\frac{1}{n_i ^ 2}
+\frac{1}{n_i ^2}
 \left[
-  (1-\pi)^2 \cdot n_i p_0 (1 - p_0)
-  + \pi^2 \cdot 
-  	\left\{
-  		\mathbb{E}[Var[B(n_i - \epsilon_i, p_0)]]
-  		+ Var[\mathbb{E}[B(n_i - \epsilon_i, p_0)]]
-  	\right\}
-  + \pi^2 \cdot Var[\epsilon_i]
-  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), B(n_i - \epsilon_i, p_0)]
-  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), \epsilon_i]
-  + 2 \pi^2 \cdot Cov[B(n_i - \epsilon_i, p_0), \epsilon_i]
+  (1 - \pi) \cdot n_i p_0 (1 - p_0)
+  + \pi \cdot (n_i - \mathbb{E}[\epsilon_i]) p_0 (1 - p_0)
+  + \pi \cdot Var[\epsilon_i]
+  + 2 \pi \cdot Cov(B(n_i - \epsilon_i, p_0), \epsilon_i)
+  + Var[n_i p_0 + \pi \cdot \epsilon_i (1 - p_0)]
 \right]
 
 \\
 &=
-\frac{1}{n_i ^ 2}
+\frac{1}{n_i ^2}
 \left[
-  (1-\pi)^2 \cdot n_i p_0 (1 - p_0)
-  + \pi^2 \cdot 
-  	\left\{
-  		(n_i - \mathbb{E}[\epsilon_i]) p_0 (1 - p_0)
-  		+ Var[(n_i - \epsilon_i)p_0]
-  	\right\}
-  + \pi^2 \cdot Var[\epsilon_i]
-  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), B(n_i - \epsilon_i, p_0)]
-  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), \epsilon_i]
-  + 2 \pi^2 \cdot Cov[B(n_i - \epsilon_i, p_0), \epsilon_i]
-\right]
-
-\\
-&=
-\frac{1}{n_i ^ 2}
-\left[
-  (1-\pi)^2 \cdot n_i p_0 (1 - p_0)
-  + \pi^2 \cdot 
-  	\left\{
-  		(n_i - \mathbb{E}[\epsilon_i]) p_0 (1 - p_0)
-  		+ p_0^2 \cdot Var[\epsilon_i]
-  	\right\}
-  + \pi^2 \cdot Var[\epsilon_i]
-  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), B(n_i - \epsilon_i, p_0)]
-  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), \epsilon_i]
-  + 2 \pi^2 \cdot Cov[B(n_i - \epsilon_i, p_0), \epsilon_i]
-\right]
-
-\\
-&=
-\frac{1}{n_i ^ 2}
-\left[
-n_i p_0 (1 - p_0)
-  + \pi^2 \cdot 
-  	\left\{
-  		- \mathbb{E}[\epsilon_i] \cdot p_0 (1 - p_0)
-  		+ p_0^2 \cdot Var[\epsilon_i]
-  	\right\}
-  + \pi^2 \cdot Var[\epsilon_i]
-  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), B(n_i - \epsilon_i, p_0)]
-  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), \epsilon_i]
-  + 2 \pi^2 \cdot Cov[B(n_i - \epsilon_i, p_0), \epsilon_i]
+	n_i p_0 (1 - p_0) 
+	- \pi \cdot p_0 (1 - p_0) \mathbb{E}[\epsilon_i]
+	+ \pi \cdot Var[\epsilon_i]
+	+ 2\pi \cdot Cov(B(n_i - \epsilon_i, p_0), \epsilon_i)
+	+ \pi^2 (1 - p_0)^2 Var[\epsilon_i]
 \right]
 
 \\
 &=
 \frac{p_0 (1 - p_0)}{n_i}
-+ \frac{\pi^2}{n_i^2}
++ \frac{\pi}{n_i^2}
 \left[
-	- p_0 (1 - p_0) \cdot \mathbb{E}[\epsilon_i] 
-	+ (1 + p_0^2) \cdot Var[\epsilon_i]
-  + 2 \cdot \frac{1-\pi}{\pi} \cdot Cov[B(n_i, p_0), B(n_i - \epsilon_i, p_0)]
-  + 2 \cdot \frac{1-\pi}{\pi} \cdot Cov[B(n_i, p_0), \epsilon_i]
-  + 2 \cdot Cov[B(n_i - \epsilon_i, p_0), \epsilon_i]
+	- p_0 (1 - p_0) \mathbb{E}[\epsilon_i] 
+	+ (1 + \pi (1 - p_0)^2) Var[\epsilon_i]
+	+ 2 \cdot Cov(B(n_i - \epsilon_i, p_0), \epsilon_i)
 \right]
 
 \end{align}
 $$
-
 
 
 식이 뭔가 복잡해보이지만, 여기서 말하고자 하는 바는 간단하다: 
