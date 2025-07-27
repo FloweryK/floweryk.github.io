@@ -1,8 +1,8 @@
 ---
-title: Abnormal Detection Using Noised Binomial Distribution with CLT
+title: Abnormal Detection Using Noised Binomial Distribution
 date: 2025-03-20 22:00:00 +0900
-categories: [Study, Data Science]
-tags: [Study, Data Science, Abnormal Detection, Statistics]
+categories: [Note, Data Science]
+tags: [Abnormal Detection, Statistics]
 math: true
 ---
 
@@ -73,20 +73,20 @@ IP가 오염된 경우를 아래와 같은 Noised Binomial Distribution으로 �
 
 <br/>
 
-표본집단의 success case 수를 `Z`라는 Variable로 표현하자. 만약 `i`번째 표본집단이 정상적인 경우라면 success case를 아래와 같이 표현할 수 있다:
+`i`번째 표본 집단의 success case 수를 z_i 라고 표시하고, 해당 표본집단의 크기를 n_i, 그리고 정상적인 경우의 success probability를 p_0라고 하자. 정상적인 경우(normal)와 비정상적인 경우(noisy)에 대해 아래와 같이 표현할 수 있다:
 
 
 $$
-z_i \sim B(n_i, p)
-$$
+\begin{align}
 
+z_i \sim
+\begin{cases} 
+B(n_i, p_0) \ \text{(if group i is normal)}
+\\
+B(n_i - \epsilon_i, p_0) + \epsilon_i \ \text{(if group i is noisy)}
+\end{cases}
 
-
-만약 `i`번째 표본집단이 비정상적인 경우여서 success case에 `ε` 만큼의 노이즈가 섞인다면 아래와 같이 표현할 수 있다:
-
-
-$$
-z_i \sim B(n_i - \epsilon_i, p) + \epsilon_i
+\end{align}
 $$
 
 
@@ -94,78 +94,153 @@ $$
 만약 비정상적인 경우가 발생할 확률을 `π`라고 한다면, 일반적인 success case 수를 아래와 같은 Mixture Distribution으로 표현할 수 있다:
 
 
-$$
-z_i \sim (1-\pi) \cdot B(n_i, p) + \pi \cdot (B(n_i - \epsilon_i, p) + \epsilon_i)
-$$
-
-
-
-이는 아래와 같이 간략하게 표현할 수도 있다:
-
 
 $$
-X \sim B(n, p)
-$$
-
-
-$$
-Y \sim Bern(\pi)
-\\
-N \sim g(\theta)
-$$
-
-$$
-Z \sim X \ + Y \cdot N
+z_i 
+\sim (1-\pi) \cdot B(n_i, p_0) + \pi \cdot (B(n_i - \epsilon_i, p_0) + \epsilon_i)
 $$
 
 
 
-이 경우, 해당 표본집단의 success probability 추정값의 기대값과 분산은 아래와 같다:
+이를 normal case 위주로 묶으면 아래와 같이 표현할 수도 있다:
+
+
+$$
+z_i 
+\sim B(n_i, p_0) + \pi \cdot (B(n_i - \epsilon_i, p_0) - B(n_i, p_0) + \epsilon_i)
+$$
+
+
+
+이제 측정 가능한 데이터로부터 추정할 수 있는 각 표본집단의 success probability 추정값 `p hat`의 기대값과 분산을 구하면 아래와 같다:
+
+(여기서 z_i는 e_i에 종속적인 확률 변수이므로, [Law of Total Expectation](https://en.wikipedia.org/wiki/Law_of_total_expectation)과 [Law of Total Variance](https://en.wikipedia.org/wiki/Law_of_total_variance#Discrete/Finite_Proof)를 사용한다.)
 
 
 $$
 \begin{align}
 
-E[\hat{p}] 
-&= E \left[ \frac{Z}{n} \right] = \frac{1}{n} E[Z]
+\mathbb{E}[\frac{z_i}{n_i}]
+&= \mathbb{E}[\hat{p}] 
 \\
-&= \frac{1}{n} \left( E[X] +  E[Y] \cdot E[N] \right)
-= \frac{1}{n} \left( np +  \pi \cdot E[N] \right)
-= p \ + \ \frac{\pi \cdot E[N]}{n}
-
-\end{align}
-$$
-
-
-$$
-\begin{align}
-
-Var(\hat{p}) 
-&= Var \left( \frac{Z}{n} \right) 
-= \frac{1}{n^2} Var(Z) 
+&= n_i p_0 + \pi \cdot \{(n_i-\mathbb{E}[\epsilon_i])p_0 - n_i p_0 + \mathbb{E}[\epsilon_i] \}
 \\
-&= \frac{1}{n^2} \left( Var(X) + Var(YN) + 2 \cdot Cov(X, YN) \right)
-\\
-&= \frac{1}{n^2} \left( Var(X) + Var(YN) \right)
-\\
-&= \frac{1}{n^2} \left( np(1-p) + E[Y^2] \cdot E[N^2] - (E[Y] \cdot E[N])^2  \right)
-\\
-&= \frac{1}{n^2} \left( np(1-p) + \pi \cdot E[N^2] - \pi^2 \cdot (E[N])^2  \right)
-\\
-&= \frac{1}{n^2} \left( np(1-p) + \pi \cdot (Var(N) + (E[N])^2) - \pi^2 \cdot (E[N])^2  \right)
-\\
-&= \frac{p(1-p)}{n} + \frac{\pi \cdot Var(N) + \pi(1-\pi) \cdot (E[N])^2}{n}
+&= n_i p_0 + \pi \cdot \mathbb{E}[\epsilon_i] (1-p_0)
 
 \end{align}
 $$
 
 
 
-기대값과 분산의 각 항에 주목하자. Mixture Distribution을 쓸 때부터 자명한 결과지만, 기대값과 분산의 첫 항은 정상적인 표본집단이 모여서 만드는 분포이며, 나머지 항들은 비정상적인 표본집단의 노이즈로 인해 success probability가 정상보다 크게 왜곡되어 나타난 결과이다.
+$$
+\begin{align}
 
-즉, 모든 표본집단의 success probability를 구하고 histogram을 그려보면, one peak distribution를 베이스로 노이즈가 섞인 결과를 볼 수 있음을 예상할 수 있다. 이를 실제 실험으로 확인해보자.
+Var[\frac{z_i}{n_i}] 
+&= Var[\hat{p}] 
 
-<br/>
+\\
+&= 
+\frac{1}{n_i ^ 2}
+\left[
+  (1-\pi)^2 \cdot Var[B(n_i, p_0)] 
+  + \pi^2 \cdot Var[B(n_i-\epsilon_i, p_0)] 
+  + \pi^2 \cdot Var[\epsilon_i]
+  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), B(n_i - \epsilon_i, p_0)]
+  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), \epsilon_i]
+  + 2 \pi^2 \cdot Cov[B(n_i - \epsilon_i, p_0), \epsilon_i]
+\right]
+
+\\
+&=
+\frac{1}{n_i ^ 2}
+\left[
+  (1-\pi)^2 \cdot n_i p_0 (1 - p_0)
+  + \pi^2 \cdot 
+  	\left\{
+  		\mathbb{E}[Var[B(n_i - \epsilon_i, p_0)]]
+  		+ Var[\mathbb{E}[B(n_i - \epsilon_i, p_0)]]
+  	\right\}
+  + \pi^2 \cdot Var[\epsilon_i]
+  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), B(n_i - \epsilon_i, p_0)]
+  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), \epsilon_i]
+  + 2 \pi^2 \cdot Cov[B(n_i - \epsilon_i, p_0), \epsilon_i]
+\right]
+
+\\
+&=
+\frac{1}{n_i ^ 2}
+\left[
+  (1-\pi)^2 \cdot n_i p_0 (1 - p_0)
+  + \pi^2 \cdot 
+  	\left\{
+  		(n_i - \mathbb{E}[\epsilon_i]) p_0 (1 - p_0)
+  		+ Var[(n_i - \epsilon_i)p_0]
+  	\right\}
+  + \pi^2 \cdot Var[\epsilon_i]
+  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), B(n_i - \epsilon_i, p_0)]
+  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), \epsilon_i]
+  + 2 \pi^2 \cdot Cov[B(n_i - \epsilon_i, p_0), \epsilon_i]
+\right]
+
+\\
+&=
+\frac{1}{n_i ^ 2}
+\left[
+  (1-\pi)^2 \cdot n_i p_0 (1 - p_0)
+  + \pi^2 \cdot 
+  	\left\{
+  		(n_i - \mathbb{E}[\epsilon_i]) p_0 (1 - p_0)
+  		+ p_0^2 \cdot Var[\epsilon_i]
+  	\right\}
+  + \pi^2 \cdot Var[\epsilon_i]
+  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), B(n_i - \epsilon_i, p_0)]
+  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), \epsilon_i]
+  + 2 \pi^2 \cdot Cov[B(n_i - \epsilon_i, p_0), \epsilon_i]
+\right]
+
+\\
+&=
+\frac{1}{n_i ^ 2}
+\left[
+n_i p_0 (1 - p_0)
+  + \pi^2 \cdot 
+  	\left\{
+  		- \mathbb{E}[\epsilon_i] \cdot p_0 (1 - p_0)
+  		+ p_0^2 \cdot Var[\epsilon_i]
+  	\right\}
+  + \pi^2 \cdot Var[\epsilon_i]
+  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), B(n_i - \epsilon_i, p_0)]
+  + 2 (1-\pi)\pi \cdot Cov[B(n_i, p_0), \epsilon_i]
+  + 2 \pi^2 \cdot Cov[B(n_i - \epsilon_i, p_0), \epsilon_i]
+\right]
+
+\\
+&=
+\frac{p_0 (1 - p_0)}{n_i}
++ \frac{\pi^2}{n_i^2}
+\left[
+	- p_0 (1 - p_0) \cdot \mathbb{E}[\epsilon_i] 
+	+ (1 + p_0^2) \cdot Var[\epsilon_i]
+  + 2 \cdot \frac{1-\pi}{\pi} \cdot Cov[B(n_i, p_0), B(n_i - \epsilon_i, p_0)]
+  + 2 \cdot \frac{1-\pi}{\pi} \cdot Cov[B(n_i, p_0), \epsilon_i]
+  + 2 \cdot Cov[B(n_i - \epsilon_i, p_0), \epsilon_i]
+\right]
+
+\end{align}
+$$
+
+
+
+식이 뭔가 복잡해보이지만, 여기서 말하고자 하는 바는 간단하다: 
+
+1. 만약 `π`가 매우 작다면 z_i는 정상적인 분포를 따르게 된다.
+2. 만약 `π`가 충분히 작지 않더라도, z_i 어딘가에 정상적인 분포의 흔적이 있다. (기댓값, 분산의 첫 번째 항)
+
+
+
+이는 사실 Mixture Distribution을 쓸 때부터 자명한 결과이긴 하다. 만약 `π`가 충분히 작지 않더라도, 비정상적인 분포가 정상적인 분포보다 충분히 떨어져 있어서 (즉 e_i의 기대값이 충분히 커서) 두 분포가 해상도 내에서 갈라지는 것을 확인할 수 있다면 어떨까?
+
+이 경우, 모든 표본 집단의 success probability를 구한 뒤 histrogram을 그려보면 **(식 6)**의 첫 번째 항이 가장 첫 번째 peak로 보일 것을 예상할 수 있다. 즉, 해상도가 충분하다면 우리가 원했던 정상 분포의 success probability를 관측값을 통해 구할 수 있다. 이를 실제 실험으로 확인해보자.
 
 <br/>
 
@@ -181,8 +256,6 @@ $$
   - 이 분포는 이론에서 예측한 기대값과 분산을 거의 정확하게 따르고 있음을 알 수 있다.
 - **주목 2**: 이론에서 예측한 바와 같이, 비정상적인 success probability는 분포 상에서 정상적인 success probability보다 큰 분포로 나타난다.
   - 여기서 비정상적인 success probability 또한 완전히 랜덤한 노이즈가 가해지지는 않은 것으로 보여, 좀 더 넓은 분산을 가진 두 번째 피크로 나타남을 알 수 있다.
-
-<br/>
 
 <br/>
 

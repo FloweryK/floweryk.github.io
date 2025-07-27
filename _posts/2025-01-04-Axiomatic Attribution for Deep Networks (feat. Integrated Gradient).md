@@ -1,8 +1,8 @@
 ---
 title: Axiomatic Attribution for Deep Networks (feat. Integrated Gradient)
 date: 2025-01-04 03:00:00 +0900
-categories: [Study, Machine Learning]
-tags: [Study, Machine Learning, XAI]
+categories: [Paper, Machine Learning]
+tags: [XAI]
 ---
 
 
