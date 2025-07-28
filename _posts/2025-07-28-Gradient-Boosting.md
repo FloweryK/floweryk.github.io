@@ -12,11 +12,11 @@ math: true
 
 - Stochastic Gradient Boosting **(Friedman)**  ([https://www.researchgate.net/publication/222573328_Stochastic_Gradient_Boosting](https://www.researchgate.net/publication/222573328_Stochastic_Gradient_Boosting))
 
-- AdaBoost and the Super Bowl of Classifiers A Tutorial Introduction to Adaptive Boosting **(Rojas)** ([http://www.inf.fu-berlin.de/inst/ag-ki/adaboost4.pdf](http://www.inf.fu-berlin.de/inst/ag-ki/adaboost4.pdf))
+- AdaBoost and the Super Bowl of Classifiers A Tutorial Introduction to Adaptive Boosting **(Rojas)** ([https://www.inf.fu-berlin.de/inst/ag-ki/adaboost4.pdf](https://www.inf.fu-berlin.de/inst/ag-ki/adaboost4.pdf))
 
 **Lecture Notes:**
 
-- A Gentle Introduction to Gradient Boosting (Cheng Li) ([http://www.chengli.io/tutorials/gradient_boosting.pdf](http://www.chengli.io/tutorials/gradient_boosting.pdf))
+- A Gentle Introduction to Gradient Boosting (Cheng Li) ([https://www.chengli.io/tutorials/gradient_boosting.pdf](https://www.chengli.io/tutorials/gradient_boosting.pdf))
 - [https://en.wikipedia.org/wiki/Gradient_boosting](https://en.wikipedia.org/wiki/Gradient_boosting)
 
 <br/>
