@@ -154,7 +154,7 @@ $$
 
 <br/>
 
-## Practices
+## 3. Practices
 
 ---
 
